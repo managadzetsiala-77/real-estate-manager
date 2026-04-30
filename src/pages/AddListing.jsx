@@ -116,7 +116,7 @@ function AddListing() {
                     })}
                   </select>
                 </div>
-                <div>
+                <div className="flex flex-col">
                   <label htmlFor="city_id">ქალაქი</label>
                   <select
                     className="border"
