@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
 
+
+import { useQuery } from "@tanstack/react-query";
+
 export default function Home() {
+ 
   return (
     <>
       

@@ -3,10 +3,55 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRegions, getCities, createAppartment } from "../api/appartments";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { getAgents } from "../api/appartments";
+
+//validation form appartment form
+const schema = yup.object({
+  address: yup
+    .string()
+    .required("შევსება სავალდებულოა")
+    .min(2, "მინიმუმ ორი სიმბოლო"),
+
+  zip_code: yup
+    .string()
+    .required("შევსება სავალდებულოა")
+    .matches(/^\d+$/, "მხოლოდ რიცხვები"),
+
+  price: yup
+    .string()
+    .required("ფასი სავალდებულოა")
+    .matches(/^\d+$/, "მხოლოდ რიცხვები"),
+  area: yup
+    .string()
+    .required("შევსება სავალდებულოა")
+    .matches(/^\d+$/, "მხოლოდ რიცხვები"),
+  bedrooms: yup
+    .string()
+    .required("შევსება სავალდებულოა")
+    .matches(/^\d+$/, "მხოლოდ რიცხვები"),
+  description: yup
+    .string()
+    .required("შევსება სავალდებულოა")
+    .min(5, "მინიმუმ ხუთი სიტყვა"),
+  image: yup
+    .mixed()
+    .required("სურათის ატვირთვა სავალდებულოა")
+    .test("fileType", "მხოლოდ სურათები (jpg, jpeg, png)", (value) => {
+      if (!value || value.length === 0) {
+        return false; // სურათი აუცილებელია
+      }
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      return allowedTypes.includes(value[0].type);
+    }),
+  region_id: yup.string().required("აირჩიეთ რეგიონი"),
+  city_id: yup.string().required("აირჩიეთ ქალაქი"),
+  agent_id: yup.string().required("აირჩიეთ აგენტი"),
+  is_rental: yup.string().required("აირჩიეთ გარიგების ტიპი"),
+});
 
 function AddListing() {
-  const schema = yup.object({});
+  //get regions data
   const {
     isPending: regionisPending,
     error: regionError,
@@ -15,6 +60,8 @@ function AddListing() {
     queryKey: ["regions"],
     queryFn: getRegions,
   });
+
+  //get cities data
   const {
     isPending: citiesIsPanding,
     error: citiesError,
@@ -24,37 +71,35 @@ function AddListing() {
     queryFn: getCities,
   });
   // console.log(cities);
+  //get agents data
+  const { data: agents } = useQuery({
+    queryKey: ["agents"],
+    queryFn: getAgents,
+  });
+
+  //create appartment
   const addListing = useMutation({
     mutationFn: (data) => createAppartment(data),
   });
 
-  const { register, handleSubmit, reset, watch, setValue } = useForm({
+  //react hook form to fill appartments form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { is_rental: "0" },
   });
-
-  function sabmitHandler(data) {
-    const formData = new FormData();
-
-    formData.append("region_id", +data.region_id);
-    formData.append("city_id ", +data.city_id);
-    formData.append("price ", +data.price);
-    formData.append("address ", data.address);
-    formData.append("zip_code ", data.zip_code);
-    formData.append("description ", data.description);
-    formData.append("area ", +data.area);
-    formData.append("bedrooms ", +data.bedrooms);
-    formData.append("is_rental ", +data.is_rental);
-    formData.append("agent_id ", +data.agent_id);
-    formData.append("image ", data.image[0]);
-
-    addListing.mutate(formData);
-    reset();
-  }
+  //watching inputfileds(region,city,image)
   const region = watch("region-id");
   const city = watch("city_id");
   const image = watch("image");
 
+  //select correct region when city is olready selectsd
   useEffect(() => {
     if (city) {
       const selectedCity = cities?.find((item) => item.id == city);
@@ -62,6 +107,7 @@ function AddListing() {
     }
   }, [city, cities, setValue]);
 
+  //select correct cities when regions is select
   const filteredCities = useMemo(() => {
     const selectedRegion = region !== "";
 
@@ -70,18 +116,22 @@ function AddListing() {
     }
     return cities;
   }, [region, cities]);
-  console.log(filteredCities);
+  // console.log(filteredCities);
+  //handle appartment form submit
+  function sabmitHandler(data) {
+    //format data in correct form
+    const correctData = formatData(data);
 
-  // const filteredRegion = useMemo(() => {
-  //   const selectedCity = cities?.find((item) => item.id == city);
-  //   const regionId = selectedCity?.region_id;
-
-  //   if (selectedCity) {
-  //     return regions?.filter((region) => region.id == regionId);
-  //   }
-
-  //   return regions;
-  // }, [regions, city, cities]);
+    //send correct formated data in API
+    addListing.mutate(correctData, {
+      onSuccess: () => {
+        reset();
+      },
+      onError: (err) => {
+        console.error("Mutation error:", err);
+      },
+    });
+  }
   return (
     <>
       <div className="mt-15.5 bg-amber-100 flex flex-col items-center">
@@ -94,6 +144,7 @@ function AddListing() {
           onSubmit={handleSubmit(sabmitHandler)}
         >
           <div>
+            {/* start space to choose agriment type */}
             <div>
               <h3 className="font-medium text-[16px] uppercase mb-2">
                 გარიგების ტიპი
@@ -119,7 +170,9 @@ function AddListing() {
                 </label>
               </div>
             </div>
+            {/* end space to choose agriment type */}
 
+            {/* starts space to choose location */}
             <div className="flex flex-col gap-5">
               <h3 className="mb-5.5 font-medium">მდებარეობა</h3>
               <div className=" flex gap-5">
@@ -131,7 +184,12 @@ function AddListing() {
                     id="address"
                     {...register("address")}
                   />
-                  <p>✔️მინიმუმ ორი სიმბოლო</p>
+                  <p className={`${errors.address && "text-red-500"}`}>
+                    ✔️{" "}
+                    {errors.address
+                      ? errors.address.message
+                      : " მინიმუმ ორი სიმბოლო"}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="zip_code">საფოსტო ინდექსი *</label>
@@ -141,7 +199,12 @@ function AddListing() {
                     id="zip_code"
                     {...register("zip_code")}
                   />
-                  <p>✔️მხოლოდ რიცხვები</p>
+                  <p className={errors.zip_code && "text-red-500"}>
+                    ✔️{" "}
+                    {errors.zip_code
+                      ? errors.zip_code.message
+                      : "მხოლოდ რიცხვები "}
+                  </p>
                 </div>
               </div>
 
@@ -162,6 +225,10 @@ function AddListing() {
                       );
                     })}
                   </select>
+                  <p className={errors.region_id && "text-red-500"}>
+                    ✔️
+                    {errors.region_id ? errors.region_id.message : "რეგიონი აუცილებელია"}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="city_id">ქალაქი</label>
@@ -179,10 +246,15 @@ function AddListing() {
                       );
                     })}
                   </select>
+                  <p className={errors.city_id && "text-red-500"}>
+                    ✔️{errors.city_id ? errors.city_id.message : "ქალაქი აუცილებელია"}
+                  </p>
                 </div>
               </div>
             </div>
+            {/* end space to choose location */}
 
+            {/* start space to add appartment details */}
             <div className="mt-20">
               <h3>ბინის დეტალები</h3>
 
@@ -195,7 +267,10 @@ function AddListing() {
                     id="price"
                     {...register("price")}
                   />{" "}
-                  <p>✔️მხოლოდ რიცხვები</p>
+                 <p className={errors.price && "text-red-500"}>
+                    ✔️
+                    {errors.price ? errors.price.message : "მხოლოდ რიცხვები"}
+                  </p>
                 </label>
 
                 <label className="flex flex-col " htmlFor="area">
@@ -206,7 +281,10 @@ function AddListing() {
                     id="area"
                     {...register("area")}
                   />{" "}
-                  <p>✔️მხოლოდ რიცხვები</p>
+                 <p className={errors.area && "text-red-500"}>
+                    ✔️
+                    {errors.area ? errors.area.message : "მხოლოდ რიცხვები"}
+                  </p>
                 </label>
               </div>
               <label htmlFor="bedrooms" className="flex flex-col items-start ">
@@ -217,7 +295,10 @@ function AddListing() {
                   id="bedrooms"
                   {...register("bedrooms")}
                 />{" "}
-                <p>✔️მხოლოდ რიცხვები</p>
+               <p className={errors.bedrooms && "text-red-500"}>
+                  ✔️
+                  {errors.bedrooms ? errors.bedrooms.message : "მხოლოდ რიცხვები"}
+                </p>
               </label>
               <label htmlFor="description" className="flex flex-col  ">
                 აღწერა *{" "}
@@ -226,7 +307,10 @@ function AddListing() {
                   className="border "
                   {...register("description")}
                 ></textarea>{" "}
-                <p>✔️მინიმუმ ხუთი სიტყვა</p>
+              <p className={errors.description && "text-red-500"}>
+                  ✔️
+                  {errors.description ? errors.description.message : "მინიმუმ ხუთი სიტყვა"}
+                </p>
               </label>
 
               <label htmlFor="image">ატვირთეთ ფოტო *</label>
@@ -245,12 +329,36 @@ function AddListing() {
 
                 <input type="file" hidden id="image" {...register("image")} />
               </div>
+              <p className={errors.image && "text-red-500"}>
+                ✔️
+                {errors.image ? errors.image.message : "ფოტო აუცილებელია"}
+              </p>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="agent_id">ჩაწერე აგენტის აიდი</label>
-            <input type="text" className="border" {...register("agent_id")} />
+          {/* end space to add appartment details */}
+
+          {/* start space to achoose agent */}
+
+          <div className="flex flex-col gap-2 items-start">
+            <label htmlFor="agent_id">აირჩიე აგენტი</label>
+            {/* <input type="text" className="border" {...register("agent_id")} /> */}
+            <select name="" id="" className="border " {...register("agent_id")}>
+              <option value="">აირჩიე</option>
+              {agents?.map((agent) => {
+                return (
+                  <option
+                    value={agent.id}
+                    key={agent.id}
+                  >{`${agent.name} ${agent.surname}`}</option>
+                );
+              })}
+            </select>
+            <p className={errors.agent_id && "text-red-500"}>
+                ✔️
+                {errors.agent_id ? errors.agent_id.message : "აგენტი აუცილებელია"}
+              </p>
           </div>
+          {/* end space to achoose agent */}
           <button type="submit" className="border mt-6">
             ლისტინგის დამატება
           </button>
@@ -258,6 +366,26 @@ function AddListing() {
       </div>
     </>
   );
+}
+
+//format data in correct form
+function formatData(data) {
+  //create formData object to solve image uploude image correct format
+  const formData = new FormData();
+  //append form filed  values in form data object
+  formData.append("region_id", +data.region_id);
+  formData.append("city_id", +data.city_id);
+  formData.append("price", +data.price);
+  formData.append("address", data.address);
+  formData.append("zip_code", data.zip_code);
+  formData.append("description", data.description);
+  formData.append("area", +data.area);
+  formData.append("bedrooms", +data.bedrooms);
+  formData.append("is_rental", +data.is_rental);
+  formData.append("agent_id", +data.agent_id);
+  formData.append("image", data.image[0]);
+
+  return formData;
 }
 
 export default AddListing;
