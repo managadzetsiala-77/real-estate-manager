@@ -90,7 +90,7 @@ export default function AgentModal({ setIsOpen }) {
                 )}
                 {!errors.name && (
                   <p className="font-normal text-sm mt-1">
-                    ✔️ მინიმუმ ორი სიმბოლო
+                    <span aria-hidden="true">✓</span> მინიმუმ ორი სიმბოლო
                   </p>
                 )}
               </label>
@@ -112,7 +112,7 @@ export default function AgentModal({ setIsOpen }) {
                 )}
                 {!errors.surname && (
                   <p className="font-normal text-sm mt-1">
-                    ✔️ მინიმუმ ორი სიმბოლო
+                    <span aria-hidden="true">✓</span> მინიმუმ ორი სიმბოლო
                   </p>
                 )}
               </label>
@@ -136,7 +136,7 @@ export default function AgentModal({ setIsOpen }) {
                 )}
                 {!errors.email && (
                   <p className="font-normal text-sm mt-1">
-                    ✔️ გამოიყენეთ @redberry.ge ფოსტა
+                    <span aria-hidden="true">✓</span> გამოიყენეთ @redberry.ge ფოსტა
                   </p>
                 )}
               </label>
@@ -158,7 +158,7 @@ export default function AgentModal({ setIsOpen }) {
                 )}
                 {!errors.phone && (
                   <p className="font-normal text-sm mt-1">
-                    ✔️ გამოიყენეთ მხოლოდ ციფრები,უნდა იწყებოდეს "5" - ით და უნდა შედგებოდეს 9 ციფრისგან
+                  <span aria-hidden="true">✓</span> გამოიყენეთ მხოლოდ ციფრები,უნდა იწყებოდეს "5" - ით და უნდა შედგებოდეს 9 ციფრისგან
                   </p>
                 )}
               </label>
@@ -190,7 +190,7 @@ export default function AgentModal({ setIsOpen }) {
                 </p>
               )}
               {!errors.avatar && (
-                <p className="font-normal text-sm mt-1">✔️ ფოტო აუცილებელია</p>
+                <p className="font-normal text-sm mt-1"><span aria-hidden="true">✓</span> ფოტო აუცილებელია</p>
               )}
             </div>
 
