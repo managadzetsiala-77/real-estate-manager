@@ -5,6 +5,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRegions, getCities, createAppartment } from "../api/appartments";
 import { useEffect, useMemo } from "react";
 import { getAgents } from "../api/appartments";
+import { Link } from "react-router-dom";
+import Button from "../components/Button";
+
 
 //validation form appartment form
 const schema = yup.object({
@@ -134,15 +137,12 @@ function AddListing() {
   }
   return (
     <>
-      <div className="mt-15.5 bg-amber-100 flex flex-col items-center">
+      <div className="mt-15.5  flex flex-col items-center">
         <h2 className="text-[32px] font-medium text-[#021526]">
           ლისტინგის დამატება
         </h2>
 
-        <form
-          className="max-w-197.5 bg-blue-100"
-          onSubmit={handleSubmit(sabmitHandler)}
-        >
+        <form className="max-w-197.5 " onSubmit={handleSubmit(sabmitHandler)}>
           <div>
             {/* start space to choose agriment type */}
             <div>
@@ -227,7 +227,9 @@ function AddListing() {
                   </select>
                   <p className={errors.region_id && "text-red-500"}>
                     ✔️
-                    {errors.region_id ? errors.region_id.message : "რეგიონი აუცილებელია"}
+                    {errors.region_id
+                      ? errors.region_id.message
+                      : "რეგიონი აუცილებელია"}
                   </p>
                 </div>
                 <div className="flex flex-col">
@@ -247,7 +249,10 @@ function AddListing() {
                     })}
                   </select>
                   <p className={errors.city_id && "text-red-500"}>
-                    ✔️{errors.city_id ? errors.city_id.message : "ქალაქი აუცილებელია"}
+                    ✔️
+                    {errors.city_id
+                      ? errors.city_id.message
+                      : "ქალაქი აუცილებელია"}
                   </p>
                 </div>
               </div>
@@ -267,7 +272,7 @@ function AddListing() {
                     id="price"
                     {...register("price")}
                   />{" "}
-                 <p className={errors.price && "text-red-500"}>
+                  <p className={errors.price && "text-red-500"}>
                     ✔️
                     {errors.price ? errors.price.message : "მხოლოდ რიცხვები"}
                   </p>
@@ -281,7 +286,7 @@ function AddListing() {
                     id="area"
                     {...register("area")}
                   />{" "}
-                 <p className={errors.area && "text-red-500"}>
+                  <p className={errors.area && "text-red-500"}>
                     ✔️
                     {errors.area ? errors.area.message : "მხოლოდ რიცხვები"}
                   </p>
@@ -295,9 +300,11 @@ function AddListing() {
                   id="bedrooms"
                   {...register("bedrooms")}
                 />{" "}
-               <p className={errors.bedrooms && "text-red-500"}>
+                <p className={errors.bedrooms && "text-red-500"}>
                   ✔️
-                  {errors.bedrooms ? errors.bedrooms.message : "მხოლოდ რიცხვები"}
+                  {errors.bedrooms
+                    ? errors.bedrooms.message
+                    : "მხოლოდ რიცხვები"}
                 </p>
               </label>
               <label htmlFor="description" className="flex flex-col  ">
@@ -307,9 +314,11 @@ function AddListing() {
                   className="border "
                   {...register("description")}
                 ></textarea>{" "}
-              <p className={errors.description && "text-red-500"}>
+                <p className={errors.description && "text-red-500"}>
                   ✔️
-                  {errors.description ? errors.description.message : "მინიმუმ ხუთი სიტყვა"}
+                  {errors.description
+                    ? errors.description.message
+                    : "მინიმუმ ხუთი სიტყვა"}
                 </p>
               </label>
 
@@ -354,14 +363,22 @@ function AddListing() {
               })}
             </select>
             <p className={errors.agent_id && "text-red-500"}>
-                ✔️
-                {errors.agent_id ? errors.agent_id.message : "აგენტი აუცილებელია"}
-              </p>
+              ✔️
+              {errors.agent_id ? errors.agent_id.message : "აგენტი აუცილებელია"}
+            </p>
           </div>
           {/* end space to achoose agent */}
-          <button type="submit" className="border mt-6">
+         <div className="flex justify-end gap-3 mt-22.75">
+         <Link
+            to="/"
+            className="inline-flex h-11.75 items-center justify-center rounded-[10px] border border-[#F93B1D] px-4 text-[16px] font-medium text-[#F93B1D] transition hover:bg-[#FFF1EE]"
+          >
+            გაუქმება
+          </Link>
+          <Button type="submit" color={"orange" } className="border mt-6">
             ლისტინგის დამატება
-          </button>
+          </Button>
+         </div>
         </form>
       </div>
     </>
