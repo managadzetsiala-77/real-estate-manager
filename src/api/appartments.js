@@ -77,7 +77,7 @@ export async function getAppartments() {
    
   }
 
- export async function getAppartment() {
+ export async function getAppartmentById(id) {
    
       const res = await fetch(`${BACE_URL}/real-estates/${id}`, {
         method: "GET",
@@ -88,7 +88,7 @@ export async function getAppartments() {
       return res.json()
  }
 
-  export async function deleteAppartments() {
+  export async function deleteAppartments(id) {
    
       const res = await fetch(`${BACE_URL}/real-estates/${id}`, {
         method: "DELETE",

@@ -184,12 +184,16 @@ function AddListing() {
                     id="address"
                     {...register("address")}
                   />
-                  <p className={`${errors.address && "text-red-500"}`}>
-                    ✔️{" "}
+                  <div className="flex items-center gap-1.75">
+                  <img src="/images/vector.svg" alt="" />
+                  <p className={`${errors.address && "text-red-500 "}`}>
+                    {" "}
                     {errors.address
                       ? errors.address.message
                       : " მინიმუმ ორი სიმბოლო"}
                   </p>
+                  </div>
+                  
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="zip_code">საფოსტო ინდექსი *</label>
@@ -199,12 +203,16 @@ function AddListing() {
                     id="zip_code"
                     {...register("zip_code")}
                   />
+                  <div className="flex items-center gap-1.75">
+                  <img src="/images/vector.svg" alt="" />
                   <p className={errors.zip_code && "text-red-500"}>
-                    ✔️{" "}
+                    {" "}
                     {errors.zip_code
                       ? errors.zip_code.message
                       : "მხოლოდ რიცხვები "}
                   </p>
+                  </div>
+                  
                 </div>
               </div>
 
@@ -225,12 +233,15 @@ function AddListing() {
                       );
                     })}
                   </select>
+                  <div className="flex items-center gap-1.75">
+                  <img src="/images/vector.svg" alt="" />
                   <p className={errors.region_id && "text-red-500"}>
-                    ✔️
                     {errors.region_id
                       ? errors.region_id.message
                       : "რეგიონი აუცილებელია"}
                   </p>
+                  </div>
+                  
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="city_id">ქალაქი</label>
@@ -248,12 +259,15 @@ function AddListing() {
                       );
                     })}
                   </select>
+                  <div className="flex items-center gap-1.75">
+                  <img src="/images/vector.svg" alt="" />
                   <p className={errors.city_id && "text-red-500"}>
-                    ✔️
                     {errors.city_id
                       ? errors.city_id.message
                       : "ქალაქი აუცილებელია"}
                   </p>
+                  </div>
+                 
                 </div>
               </div>
             </div>
@@ -272,10 +286,13 @@ function AddListing() {
                     id="price"
                     {...register("price")}
                   />{" "}
-                  <p className={errors.price && "text-red-500"}>
-                    ✔️
+                  <div className="flex items-center gap-1.75">
+                    <img src="/images/vector.svg" alt="" />
+                    <p className={errors.price && "text-red-500"}>
                     {errors.price ? errors.price.message : "მხოლოდ რიცხვები"}
                   </p>
+                  </div>
+                 
                 </label>
 
                 <label className="flex flex-col " htmlFor="area">
@@ -286,10 +303,13 @@ function AddListing() {
                     id="area"
                     {...register("area")}
                   />{" "}
-                  <p className={errors.area && "text-red-500"}>
-                    ✔️
+                  <div className="flex items-center gap-1.75">
+                    <img src="/images/vector.svg" alt="" />
+                    <p className={errors.area && "text-red-500"}>
                     {errors.area ? errors.area.message : "მხოლოდ რიცხვები"}
                   </p>
+                  </div>
+                  
                 </label>
               </div>
               <label htmlFor="bedrooms" className="flex flex-col items-start ">
@@ -300,12 +320,15 @@ function AddListing() {
                   id="bedrooms"
                   {...register("bedrooms")}
                 />{" "}
-                <p className={errors.bedrooms && "text-red-500"}>
-                  ✔️
+                <div className="flex items-center gap-1.75">
+                  <img src="/images/vector.svg" alt="" />
+                  <p className={errors.bedrooms && "text-red-500"}>
                   {errors.bedrooms
                     ? errors.bedrooms.message
                     : "მხოლოდ რიცხვები"}
                 </p>
+                </div>
+               
               </label>
               <label htmlFor="description" className="flex flex-col  ">
                 აღწერა *{" "}
@@ -314,12 +337,15 @@ function AddListing() {
                   className="border "
                   {...register("description")}
                 ></textarea>{" "}
-                <p className={errors.description && "text-red-500"}>
-                  ✔️
+                <div className="flex items-center gap-1.75">
+                  <img src="/images/vector.svg" alt="" />
+                  <p className={errors.description && "text-red-500"}>
                   {errors.description
                     ? errors.description.message
                     : "მინიმუმ ხუთი სიტყვა"}
                 </p>
+                </div>
+                
               </label>
 
               <label htmlFor="image">ატვირთეთ ფოტო *</label>
@@ -338,10 +364,13 @@ function AddListing() {
 
                 <input type="file" hidden id="image" {...register("image")} />
               </div>
+              <div className="flex items-center gap-1.75 mt-1.75">
+              <img src="/images/vector.svg" alt="" />
               <p className={errors.image && "text-red-500"}>
-                ✔️
                 {errors.image ? errors.image.message : "ფოტო აუცილებელია"}
               </p>
+              </div>
+             
             </div>
           </div>
           {/* end space to add appartment details */}
@@ -362,10 +391,13 @@ function AddListing() {
                 );
               })}
             </select>
-            <p className={errors.agent_id && "text-red-500"}>
-              ✔️
+            <div className="flex items-center gap-1.75">
+              <img src="/images/vector.svg" alt="" />
+              <p className={errors.agent_id && "text-red-500"}>
               {errors.agent_id ? errors.agent_id.message : "აგენტი აუცილებელია"}
             </p>
+            </div>
+            
           </div>
           {/* end space to achoose agent */}
          <div className="flex justify-end gap-3 mt-22.75">
