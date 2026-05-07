@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import { createAgent } from "../api/appartments";
 
+
 const schema = yup.object({
   name: yup.string().required("სახელი აუცილებელია").min(2, "მინიმუმ 2 სიმბოლო"),
   surname: yup
@@ -53,12 +54,16 @@ export default function AgentModal({ setIsOpen }) {
     addAgent.mutate(payLoad, {
       onSuccess: () => {
         setIsOpen(false);
+
         reset();
+       
+       
       },
       onError: () => {
         console.error("Error creating agent");
       },
     });
+   
   }
 
   const avatar = watch("avatar");

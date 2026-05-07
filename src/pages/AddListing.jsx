@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRegions, getCities, createAppartment } from "../api/appartments";
 import { useEffect, useMemo } from "react";
 import { getAgents } from "../api/appartments";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 
 
@@ -101,6 +101,7 @@ function AddListing() {
   const region = watch("region-id");
   const city = watch("city_id");
   const image = watch("image");
+  const navigation = useNavigate()
 
   //select correct region when city is olready selectsd
   useEffect(() => {
@@ -129,6 +130,7 @@ function AddListing() {
     addListing.mutate(correctData, {
       onSuccess: () => {
         reset();
+        navigation("/")
       },
       onError: (err) => {
         console.error("Mutation error:", err);
