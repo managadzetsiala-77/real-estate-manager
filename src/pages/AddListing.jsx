@@ -140,7 +140,7 @@ function AddListing() {
   return (
     <>
       <div className="mt-15.5  flex flex-col items-center">
-        <h2 className="text-[32px] font-medium text-[#021526]">
+        <h2 className="text-3xl font-medium text-[#021526] mb-15.25">
           ლისტინგის დამატება
         </h2>
 
@@ -148,7 +148,7 @@ function AddListing() {
           <div>
             {/* start space to choose agriment type */}
             <div>
-              <h3 className="font-medium text-[16px] uppercase mb-2">
+              <h3 className="font-medium text-[16px] font-['Helvetica_Neue'] uppercase mb-2">
                 გარიგების ტიპი
               </h3>
               <div className="flex gap-18 items-center mb-20">
@@ -176,7 +176,7 @@ function AddListing() {
 
             {/* starts space to choose location */}
             <div className="flex flex-col gap-5">
-              <h3 className="mb-5.5 font-medium">მდებარეობა</h3>
+              <h3 className="mb-5.5 text-zinc-900 text-base font-medium font-['Helvetica_Neue'] uppercase">მდებარეობა</h3>
               <div className=" flex gap-5">
                 <div className="flex flex-col">
                   <label htmlFor="address">მისამართი *</label>
@@ -222,7 +222,7 @@ function AddListing() {
                 <div className="flex flex-col">
                   <label htmlFor="region_id">რეგიონი</label>
                   <select
-                    className="border"
+                    className="border h-6.5"
                     id="region_id"
                     {...register("region-id")}
                   >
@@ -248,7 +248,7 @@ function AddListing() {
                 <div className="flex flex-col">
                   <label htmlFor="city_id">ქალაქი</label>
                   <select
-                    className="border"
+                    className="border h-6.5"
                     id="city_id"
                     {...register("city_id")}
                   >
@@ -276,10 +276,10 @@ function AddListing() {
             {/* end space to choose location */}
 
             {/* start space to add appartment details */}
-            <div className="mt-20">
-              <h3>ბინის დეტალები</h3>
+            <div className="mt-20 flex flex-col gap-5 mb-20">
+              <h3 className="mb-5.5 text-zinc-900 text-base font-medium font-['Helvetica_Neue'] uppercase ">ბინის დეტალები</h3>
 
-              <div className="flex gap-5">
+              <div className="flex gap-5 ">
                 <label htmlFor="price" className="flex flex-col ">
                   ფასი{" "}
                   <input
@@ -380,7 +380,7 @@ function AddListing() {
           {/* start space to achoose agent */}
 
           <div className="flex flex-col gap-2 items-start">
-            <label htmlFor="agent_id">აირჩიე აგენტი</label>
+            <label htmlFor="agent_id" className="text-zinc-900 text-base font-medium font-['Helvetica_Neue'] uppercase">აგენტი</label>
             {/* <input type="text" className="border" {...register("agent_id")} /> */}
             <select name="" id="" className="border " {...register("agent_id")}>
               <option value="">აირჩიე</option>
